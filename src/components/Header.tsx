@@ -1,139 +1,101 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { PageType } from '../types';
 
 interface HeaderProps {
-  currentPage: 'home' | 'about' | 'contribute';
-  setCurrentPage: (page: 'home' | 'about' | 'contribute') => void;
+  currentPage: PageType;
+  setCurrentPage: (page: PageType) => void;
 }
 
 const Header = ({ currentPage, setCurrentPage }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleNavigation = (page: 'home' | 'about' | 'contribute') => {
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleNavClick = (page: PageType) => {
     setCurrentPage(page);
     setIsMenuOpen(false);
   };
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <motion.div 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center cursor-pointer"
-              onClick={() => handleNavigation('home')}
-            >
-              <span className="text-primary-600 text-2xl font-display font-bold">Dhaal</span>
-              <span className="text-gray-800 text-2xl font-display font-bold">Delight</span>
-            </motion.div>
+    <motion.header 
+      className="bg-amber-600 text-white shadow-md"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: 'spring', stiffness: 100 }}
+    >
+      <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+        <motion.div 
+          className="flex items-center space-x-2"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: 'spring', stiffness: 300 }}
+        >
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+            <span className="text-amber-600 text-xl font-bold">D</span>
           </div>
-          
-          <nav className="hidden md:block">
-            <ul className="flex space-x-8">
-              <NavItem 
-                label="Home" 
-                isActive={currentPage === 'home'} 
-                onClick={() => handleNavigation('home')} 
-              />
-              <NavItem 
-                label="About" 
-                isActive={currentPage === 'about'} 
-                onClick={() => handleNavigation('about')} 
-              />
-              <NavItem 
-                label="Contribute" 
-                isActive={currentPage === 'contribute'} 
-                onClick={() => handleNavigation('contribute')} 
-              />
-              <NavItem label="Contact" />
-            </ul>
-          </nav>
-          
-          <div className="md:hidden">
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-primary-600 focus:outline-none"
+          <h1 
+            className="text-2xl font-bold font-display cursor-pointer" 
+            onClick={() => handleNavClick('home')}
+          >
+            Dhaal Delight
+          </h1>
+        </motion.div>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex space-x-6">
+          {['home', 'about', 'contribute'].map((page) => (
+            <motion.button 
+              key={page}
+              onClick={() => handleNavClick(page as PageType)}
+              className={`py-2 px-1 border-b-2 ${currentPage === page ? 'border-white' : 'border-transparent hover:border-amber-300'}`}
+              whileHover={{ y: -2 }}
+              transition={{ type: 'spring', stiffness: 300 }}
             >
-              {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-            </button>
-          </div>
-        </div>
+              {page.charAt(0).toUpperCase() + page.slice(1)}
+            </motion.button>
+          ))}
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <motion.button 
+          className="md:hidden text-white focus:outline-none"
+          onClick={toggleMenu}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          whileTap={{ scale: 0.95 }}
+        >
+          {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+        </motion.button>
       </div>
-      
-      {/* Mobile menu */}
+
+      {/* Mobile Navigation */}
       {isMenuOpen && (
         <motion.div 
+          className="md:hidden bg-amber-700"
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-white shadow-lg"
+          transition={{ duration: 0.3 }}
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <MobileNavItem 
-              label="Home" 
-              isActive={currentPage === 'home'} 
-              onClick={() => handleNavigation('home')} 
-            />
-            <MobileNavItem 
-              label="About" 
-              isActive={currentPage === 'about'} 
-              onClick={() => handleNavigation('about')} 
-            />
-            <MobileNavItem 
-              label="Contribute" 
-              isActive={currentPage === 'contribute'} 
-              onClick={() => handleNavigation('contribute')} 
-            />
-            <MobileNavItem label="Contact" />
+            {['home', 'about', 'contribute'].map((page) => (
+              <motion.button 
+                key={page}
+                onClick={() => handleNavClick(page as PageType)}
+                className={`block w-full text-left px-3 py-2 rounded-md ${currentPage === page ? 'bg-amber-800' : 'hover:bg-amber-800'}`}
+                whileHover={{ x: 5 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                {page.charAt(0).toUpperCase() + page.slice(1)}
+              </motion.button>
+            ))}
           </div>
         </motion.div>
       )}
-    </header>
+    </motion.header>
   );
 };
-
-interface NavItemProps {
-  label: string;
-  isActive?: boolean;
-  onClick?: () => void;
-}
-
-const NavItem = ({ label, isActive = false, onClick }: NavItemProps) => (
-  <li>
-    <a 
-      onClick={onClick}
-      className={`font-medium text-sm transition-colors duration-200 relative cursor-pointer ${
-        isActive 
-          ? 'text-primary-600' 
-          : 'text-gray-600 hover:text-primary-600'
-      }`}
-    >
-      {label}
-      {isActive && (
-        <motion.span 
-          layoutId="activeNavIndicator"
-          className="absolute bottom-0 left-0 w-full h-0.5 bg-primary-600"
-        />
-      )}
-    </a>
-  </li>
-);
-
-const MobileNavItem = ({ label, isActive = false, onClick }: NavItemProps) => (
-  <a 
-    onClick={onClick}
-    className={`block px-3 py-2 rounded-md text-base font-medium cursor-pointer ${
-      isActive 
-        ? 'bg-primary-50 text-primary-600' 
-        : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'
-    }`}
-  >
-    {label}
-  </a>
-);
 
 export default Header;

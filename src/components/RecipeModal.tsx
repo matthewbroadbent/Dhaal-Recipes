@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiClock, FiUsers } from 'react-icons/fi';
+import { FiX, FiClock, FiUsers, FiChevronRight } from 'react-icons/fi';
 import { Recipe } from '../types';
 
 interface RecipeModalProps {
@@ -38,115 +38,168 @@ const RecipeModal = ({ recipe, onClose }: RecipeModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-        <div 
-          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
-          onClick={onClose}
-          aria-hidden="true"
-        ></div>
+    <AnimatePresence>
+      <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+          {/* Background overlay */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+            onClick={onClose}
+            aria-hidden="true"
+          ></motion.div>
 
-        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.3 }}
-          className="inline-block w-full max-w-4xl overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle"
-        >
-          <div className="absolute top-0 right-0 pt-4 pr-4">
-            <button
-              type="button"
-              className="text-gray-400 bg-white rounded-md hover:text-gray-500 focus:outline-none"
-              onClick={onClose}
-            >
-              <span className="sr-only">Close</span>
-              <FiX className="w-6 h-6" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="h-64 md:h-auto">
-              <img 
-                src={recipe.image || 'https://images.pexels.com/photos/674574/pexels-photo-674574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'} 
-                alt={recipe.name} 
-                className="object-cover w-full h-full"
-              />
+          {/* Modal panel */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 300,
+              damping: 30
+            }}
+            className="inline-block w-full max-w-4xl overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle"
+            onClick={(e) => e.stopPropagation()} // Prevent clicks inside modal from closing it
+          >
+            <div className="absolute top-0 right-0 pt-4 pr-4 z-10">
+              <motion.button
+                type="button"
+                className="text-gray-400 bg-white rounded-full p-1 hover:text-gray-500 focus:outline-none"
+                onClick={onClose}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <span className="sr-only">Close</span>
+                <FiX className="w-6 h-6" />
+              </motion.button>
             </div>
-            
-            <div className="p-6 overflow-y-auto max-h-[80vh]">
-              <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
-                <h2 className="text-2xl font-bold font-display text-gray-900">{recipe.name}</h2>
-                <span className={`px-3 py-1 text-sm font-medium rounded-full ${getSpiceLevelColor(recipe.spiceLevel)}`}>
-                  {recipe.spiceLevel.charAt(0).toUpperCase() + recipe.spiceLevel.slice(1)}
-                </span>
+
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="h-64 md:h-auto relative">
+                <img 
+                  src={recipe.image || 'https://images.pexels.com/photos/674574/pexels-photo-674574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'} 
+                  alt={recipe.name} 
+                  className="object-cover w-full h-full"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent md:hidden"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 md:hidden">
+                  <h2 className="text-2xl font-bold font-display text-white">{recipe.name}</h2>
+                </div>
               </div>
               
-              <p className="mb-6 text-gray-600">{recipe.description}</p>
-              
-              <div className="flex flex-wrap gap-2 mb-6">
-                {recipe.flavors.map((flavor, index) => (
-                  <span key={index} className="px-3 py-1 text-sm bg-gray-100 rounded-full text-gray-800">
-                    {flavor}
+              <div className="p-6 overflow-y-auto max-h-[80vh]">
+                <div className="hidden md:block mb-4">
+                  <h2 className="text-2xl font-bold font-display text-gray-900">{recipe.name}</h2>
+                </div>
+                
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className={`px-3 py-1 text-sm font-medium rounded-full ${getSpiceLevelColor(recipe.spiceLevel)}`}>
+                    {recipe.spiceLevel.charAt(0).toUpperCase() + recipe.spiceLevel.slice(1)}
                   </span>
-                ))}
-              </div>
-              
-              <div className="flex flex-wrap gap-6 mb-6 text-sm text-gray-500">
-                <div className="flex items-center">
-                  <FiClock className="w-4 h-4 mr-1" />
-                  <span>Prep: {recipe.prepTime} min</span>
-                </div>
-                <div className="flex items-center">
-                  <FiClock className="w-4 h-4 mr-1" />
-                  <span>Cook: {recipe.cookTime} min</span>
-                </div>
-                <div className="flex items-center">
-                  <FiUsers className="w-4 h-4 mr-1" />
-                  <span>Serves: {recipe.servings}</span>
-                </div>
-              </div>
-              
-              {recipe.authorName && (
-                <div className="p-3 mb-6 text-sm italic bg-gray-50 rounded-md text-gray-600">
-                  Recipe contributed by: {recipe.authorName}
-                </div>
-              )}
-              
-              <div className="mb-6">
-                <h3 className="mb-3 text-lg font-medium text-gray-900">Ingredients</h3>
-                <ul className="pl-5 space-y-2 list-disc">
-                  {recipe.ingredients.map((ingredient, index) => (
-                    <li key={index} className="text-gray-700">{ingredient}</li>
+                  
+                  {recipe.flavors.map((flavor, index) => (
+                    <span key={index} className="px-3 py-1 text-sm bg-gray-100 rounded-full text-gray-800">
+                      {flavor}
+                    </span>
                   ))}
-                </ul>
-              </div>
-              
-              <div className="mb-6">
-                <h3 className="mb-3 text-lg font-medium text-gray-900">Instructions</h3>
-                <ol className="pl-5 space-y-3 list-decimal">
-                  {recipe.instructions.map((instruction, index) => (
-                    <li key={index} className="text-gray-700">{instruction}</li>
-                  ))}
-                </ol>
-              </div>
-              
-              {recipe.tips && recipe.tips.length > 0 && (
-                <div>
-                  <h3 className="mb-3 text-lg font-medium text-gray-900">Tips</h3>
-                  <ul className="pl-5 space-y-2 list-disc">
-                    {recipe.tips.map((tip, index) => (
-                      <li key={index} className="text-gray-700">{tip}</li>
+                </div>
+                
+                <p className="mb-6 text-gray-600">{recipe.description}</p>
+                
+                <div className="flex flex-wrap gap-6 mb-6 text-sm text-gray-500">
+                  <div className="flex items-center">
+                    <FiClock className="w-4 h-4 mr-1" />
+                    <span>Prep: {recipe.prepTime} min</span>
+                  </div>
+                  <div className="flex items-center">
+                    <FiClock className="w-4 h-4 mr-1" />
+                    <span>Cook: {recipe.cookTime} min</span>
+                  </div>
+                  <div className="flex items-center">
+                    <FiUsers className="w-4 h-4 mr-1" />
+                    <span>Serves: {recipe.servings}</span>
+                  </div>
+                </div>
+                
+                {recipe.authorName && (
+                  <div className="p-3 mb-6 text-sm italic bg-amber-50 rounded-md text-gray-600 border-l-4 border-amber-500">
+                    Recipe contributed by: {recipe.authorName}
+                  </div>
+                )}
+                
+                <div className="mb-6">
+                  <h3 className="mb-3 text-lg font-medium text-gray-900 flex items-center">
+                    <span className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center mr-2 text-amber-700">1</span>
+                    Ingredients
+                  </h3>
+                  <ul className="pl-10 space-y-2 list-disc">
+                    {recipe.ingredients.map((ingredient, index) => (
+                      <motion.li 
+                        key={index} 
+                        className="text-gray-700"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                      >
+                        {ingredient}
+                      </motion.li>
                     ))}
                   </ul>
                 </div>
-              )}
+                
+                <div className="mb-6">
+                  <h3 className="mb-3 text-lg font-medium text-gray-900 flex items-center">
+                    <span className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center mr-2 text-amber-700">2</span>
+                    Instructions
+                  </h3>
+                  <ol className="pl-10 space-y-3 list-decimal">
+                    {recipe.instructions.map((instruction, index) => (
+                      <motion.li 
+                        key={index} 
+                        className="text-gray-700"
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.3 + index * 0.05 }}
+                      >
+                        {instruction}
+                      </motion.li>
+                    ))}
+                  </ol>
+                </div>
+                
+                {recipe.tips && recipe.tips.length > 0 && (
+                  <div>
+                    <h3 className="mb-3 text-lg font-medium text-gray-900 flex items-center">
+                      <span className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center mr-2 text-amber-700">3</span>
+                      Tips
+                    </h3>
+                    <ul className="pl-10 space-y-2 list-disc">
+                      {recipe.tips.map((tip, index) => (
+                        <motion.li 
+                          key={index} 
+                          className="text-gray-700"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.6 + index * 0.05 }}
+                        >
+                          {tip}
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 };
 
