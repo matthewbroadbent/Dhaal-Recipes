@@ -316,7 +316,7 @@ export const recipes: Recipe[] = [
     id: 8,
     name: "Panchmel Dhaal",
     description: "A royal five-lentil mixture that's traditionally served at festive occasions. Complex and deeply satisfying.",
-    image: "https://images.pexels.com/photos/6260922/pexels-photo-6260922.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    image: "https://images.pexels.com/photos/7625055/pexels-photo-7625055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     prepTime: 20,
     cookTime: 50,
     servings: 6,
