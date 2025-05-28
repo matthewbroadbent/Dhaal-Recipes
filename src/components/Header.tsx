@@ -2,8 +2,18 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
 
-const Header = () => {
+interface HeaderProps {
+  currentPage: 'home' | 'about' | 'contribute';
+  setCurrentPage: (page: 'home' | 'about' | 'contribute') => void;
+}
+
+const Header = ({ currentPage, setCurrentPage }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleNavigation = (page: 'home' | 'about' | 'contribute') => {
+    setCurrentPage(page);
+    setIsMenuOpen(false);
+  };
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -14,7 +24,8 @@ const Header = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex items-center"
+              className="flex items-center cursor-pointer"
+              onClick={() => handleNavigation('home')}
             >
               <span className="text-primary-600 text-2xl font-display font-bold">Dhaal</span>
               <span className="text-gray-800 text-2xl font-display font-bold">Delight</span>
@@ -23,10 +34,22 @@ const Header = () => {
           
           <nav className="hidden md:block">
             <ul className="flex space-x-8">
-              <NavItem href="#" label="Home" isActive={true} />
-              <NavItem href="#" label="Recipes" />
-              <NavItem href="#" label="About" />
-              <NavItem href="#" label="Contact" />
+              <NavItem 
+                label="Home" 
+                isActive={currentPage === 'home'} 
+                onClick={() => handleNavigation('home')} 
+              />
+              <NavItem 
+                label="About" 
+                isActive={currentPage === 'about'} 
+                onClick={() => handleNavigation('about')} 
+              />
+              <NavItem 
+                label="Contribute" 
+                isActive={currentPage === 'contribute'} 
+                onClick={() => handleNavigation('contribute')} 
+              />
+              <NavItem label="Contact" />
             </ul>
           </nav>
           
@@ -50,10 +73,22 @@ const Header = () => {
           className="md:hidden bg-white shadow-lg"
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <MobileNavItem href="#" label="Home" isActive={true} />
-            <MobileNavItem href="#" label="Recipes" />
-            <MobileNavItem href="#" label="About" />
-            <MobileNavItem href="#" label="Contact" />
+            <MobileNavItem 
+              label="Home" 
+              isActive={currentPage === 'home'} 
+              onClick={() => handleNavigation('home')} 
+            />
+            <MobileNavItem 
+              label="About" 
+              isActive={currentPage === 'about'} 
+              onClick={() => handleNavigation('about')} 
+            />
+            <MobileNavItem 
+              label="Contribute" 
+              isActive={currentPage === 'contribute'} 
+              onClick={() => handleNavigation('contribute')} 
+            />
+            <MobileNavItem label="Contact" />
           </div>
         </motion.div>
       )}
@@ -61,11 +96,17 @@ const Header = () => {
   );
 };
 
-const NavItem = ({ href, label, isActive = false }: { href: string; label: string; isActive?: boolean }) => (
+interface NavItemProps {
+  label: string;
+  isActive?: boolean;
+  onClick?: () => void;
+}
+
+const NavItem = ({ label, isActive = false, onClick }: NavItemProps) => (
   <li>
     <a 
-      href={href}
-      className={`font-medium text-sm transition-colors duration-200 relative ${
+      onClick={onClick}
+      className={`font-medium text-sm transition-colors duration-200 relative cursor-pointer ${
         isActive 
           ? 'text-primary-600' 
           : 'text-gray-600 hover:text-primary-600'
@@ -82,10 +123,10 @@ const NavItem = ({ href, label, isActive = false }: { href: string; label: strin
   </li>
 );
 
-const MobileNavItem = ({ href, label, isActive = false }: { href: string; label: string; isActive?: boolean }) => (
+const MobileNavItem = ({ label, isActive = false, onClick }: NavItemProps) => (
   <a 
-    href={href}
-    className={`block px-3 py-2 rounded-md text-base font-medium ${
+    onClick={onClick}
+    className={`block px-3 py-2 rounded-md text-base font-medium cursor-pointer ${
       isActive 
         ? 'bg-primary-50 text-primary-600' 
         : 'text-gray-600 hover:bg-gray-50 hover:text-primary-600'

@@ -1,5 +1,5 @@
 export interface Recipe {
-  id: number;
+  id: number | string;  // Changed to accept both number and string for Supabase compatibility
   name: string;
   description: string;
   image: string;
@@ -11,6 +11,8 @@ export interface Recipe {
   ingredients: string[];
   instructions: string[];
   tips?: string[];
+  authorName?: string;
+  authorEmail?: string;
 }
 
 export type SpiceLevel = 'mild' | 'medium' | 'hot' | 'extreme';
