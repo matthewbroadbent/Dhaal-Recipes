@@ -12,7 +12,7 @@ export const submitRecipe = async (recipe: Omit<Recipe, 'id'>) => {
           prep_time: recipe.prepTime,
           cook_time: recipe.cookTime,
           author_name: recipe.authorName,
-          author_email: recipe.authorEmail,
+          author_email: recipe.authorEmail, // This is now valid since we added it to the Recipe type
           is_approved: false // New recipes start as unapproved
         }
       ])
@@ -57,7 +57,8 @@ export const fetchApprovedRecipes = async (): Promise<Recipe[]> => {
       ingredients: item.ingredients || [],
       instructions: item.instructions || [],
       tips: item.tips || [],
-      authorName: item.author_name
+      authorName: item.author_name,
+      authorEmail: item.author_email
     }));
   } catch (error) {
     console.error('Error in fetchApprovedRecipes:', error);

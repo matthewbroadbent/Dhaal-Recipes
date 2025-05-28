@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { supabase } from './services/supabaseClient';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -235,9 +236,11 @@ function App() {
 
       <Footer />
 
-      {selectedRecipe && (
-        <RecipeModal recipe={selectedRecipe} onClose={closeModal} />
-      )}
+      <AnimatePresence>
+        {selectedRecipe && (
+          <RecipeModal recipe={selectedRecipe} onClose={closeModal} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

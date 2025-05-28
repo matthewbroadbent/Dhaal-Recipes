@@ -12,6 +12,8 @@ export interface Recipe {
   spiceLevel: 'mild' | 'medium' | 'hot' | 'extreme';
   flavors: string[];
   authorName?: string;
+  authorEmail?: string; // Added authorEmail field
 }
 
+export type SpiceLevel = 'mild' | 'medium' | 'hot' | 'extreme'; // Added SpiceLevel export
 export type PageType = 'home' | 'about' | 'contribute';

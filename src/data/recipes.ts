@@ -3,7 +3,7 @@ import { curryGuyRecipes } from './curryGuyRecipes';
 
 export const recipes: Recipe[] = [
   {
-    id: 1,
+    id: "1", // Changed from number to string
     name: "Classic Masoor Dhaal",
     description: "A comforting red lentil dhaal with a perfect balance of spices. This everyday staple is light yet satisfying.",
     image: "https://images.pexels.com/photos/7625056/pexels-photo-7625056.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -45,7 +45,7 @@ export const recipes: Recipe[] = [
     ]
   },
   {
-    id: 2,
+    id: "2", // Changed from number to string
     name: "Tadka Moong Dhaal",
     description: "Yellow moong dhaal tempered with cumin, garlic, and dried red chilies. A light and protein-rich dish.",
     image: "https://images.pexels.com/photos/8472863/pexels-photo-8472863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -84,7 +84,7 @@ export const recipes: Recipe[] = [
     ]
   },
   {
-    id: 3,
+    id: "3", // Changed from number to string
     name: "Punjabi Chana Dhaal",
     description: "A rich and robust dhaal made with split chickpeas, perfect for special occasions. Hearty and deeply satisfying.",
     image: "https://images.pexels.com/photos/7625054/pexels-photo-7625054.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -129,7 +129,7 @@ export const recipes: Recipe[] = [
     ]
   },
   {
-    id: 4,
+    id: "4", // Changed from number to string
     name: "Spicy Toor Dhaal",
     description: "A fiery South Indian style toor dhaal with curry leaves and mustard seeds. Bold and vibrant flavors.",
     image: "https://images.pexels.com/photos/5410418/pexels-photo-5410418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -176,7 +176,7 @@ export const recipes: Recipe[] = [
     ]
   },
   {
-    id: 5,
+    id: "5", // Changed from number to string
     name: "Creamy Urad Dhaal",
     description: "A luxurious black gram dhaal that's slow-cooked to perfection. Rich, creamy, and indulgent.",
     image: "https://images.pexels.com/photos/6260921/pexels-photo-6260921.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -221,7 +221,7 @@ export const recipes: Recipe[] = [
     ]
   },
   {
-    id: 6,
+    id: "6", // Changed from number to string
     name: "Coconut Moong Dhaal",
     description: "A light and refreshing South Indian style dhaal with coconut and curry leaves. Perfect for summer days.",
     image: "https://images.pexels.com/photos/6260923/pexels-photo-6260923.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -268,7 +268,7 @@ export const recipes: Recipe[] = [
     ]
   },
   {
-    id: 7,
+    id: "7", // Changed from number to string
     name: "Spinach Masoor Dhaal",
     description: "A nutritious combination of red lentils and spinach. Packed with iron and protein.",
     image: "https://images.pexels.com/photos/6260467/pexels-photo-6260467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -313,7 +313,7 @@ export const recipes: Recipe[] = [
     ]
   },
   {
-    id: 8,
+    id: "8", // Changed from number to string
     name: "Panchmel Dhaal",
     description: "A royal five-lentil mixture that's traditionally served at festive occasions. Complex and deeply satisfying.",
     image: "https://images.pexels.com/photos/7625055/pexels-photo-7625055.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -361,8 +361,8 @@ export const recipes: Recipe[] = [
       "Each dal has a different cooking time, so it's best to cook them separately and then combine if you want perfect texture.",
       "This dal tastes even better the next day as the flavors develop."
     ]
-  },
-  ...curryGuyRecipes
+  }
+  // curryGuyRecipes will be added here
 ];
 
 export const flavorOptions = [
